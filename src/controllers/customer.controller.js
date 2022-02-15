@@ -2,7 +2,7 @@ const Customer = require('../models/customer');
 
 getAllCustomers = async (req, res) => {
     try {
-        await Customer.find({ status: true })
+        await Customer.find({ status: "active" })
             .then(data => {
                 res.status(200).json({
                     status: true,
