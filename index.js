@@ -17,8 +17,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 // routes
-app.use('/api/customer', customersRoute);
-app.use('/api/systemUser', systemUserRoute);
+app.use('/api/customer', customersRoute);           // customer route
+app.use('/api/systemUser', systemUserRoute);        //system user route
 
 // default error handler
 const errorHandler = (err, req, res, next) => {
