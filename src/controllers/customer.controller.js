@@ -1,32 +1,33 @@
 const Customer = require('../models/customer');
 
-getAllCustomers = async (req, res) => {
-    try {
-        await Customer.find({ status: "active" })
-            .then(data => {
-                res.status(200).json({
-                    status: true,
-                    responseObj: data,
-                    length: data.length
-                });
-            }).catch(err => {
-                res.status(500).json({
-                    status: false,
-                    error: err
-                });
-            });
-    } catch (error) {
+/**
+ * GET /customers
+ * Purpose: Get all customers
+ */
+getAllCustomers = (req, res) => {
+    console.log('Username', req.userName);
+    console.log('UserID', req.userId);
+    const customer = Customer.find();
+    customer.then(data => {
+        res.status(200).json({
+            status: true,
+            responseObj: data,
+            length: data.length
+        });
+    }).catch(err => {
         res.status(500).json({
             status: false,
-            error: error
+            error: err
         });
-    }
+    });
 };
 
-// GET A CUSTOMER :ID
-getCustomerByID = async (req, res) => {
-    try {
-        await Customer.find({ _id: req.params.id })
+/**
+ * GET /customers/:id
+ * Purpose: Get a specific customer by :id
+ */
+getCustomerByID = (req, res) => {
+    Customer.find({ _id: req.params.id })
             .then(data => {
                 res.status(200).json({
                     status: true,
@@ -38,19 +39,15 @@ getCustomerByID = async (req, res) => {
                     error: err
                 });
             });
-    } catch (error) {
-        res.status(500).json({
-            status: false,
-            error: error
-        });
-    }
 };
 
-// POST CUSTOMER
-createCustomer = async (req, res) => {
+/**
+ * POST /customers
+ * Purpose: Create a customer
+ */
+createCustomer = (req, res) => {
     const customer = new Customer(req.body);
-    try {
-        await customer.save()
+    customer.save()
             .then(data => {
                 res.status(200).json({
                     status: true,
@@ -63,18 +60,14 @@ createCustomer = async (req, res) => {
                     error: err
                 });
             });
-    } catch (error) {
-        res.status(500).json({
-            status: false,
-            error: error
-        });
-    }
 };
 
-// POST MULTIPLE CUSTOMER
-createAllCustomers = async (req, res) => {
-    try {
-        await Customer.insertMany(req.body)
+/**
+ * GET /customers/all
+ * Purpose: Create multiple customers
+ */
+createAllCustomers = (req, res) => {
+    Customer.insertMany(req.body)
             .then(data => {
                 res.status(200).json({
                     status: true,
@@ -87,44 +80,36 @@ createAllCustomers = async (req, res) => {
                     error: 'Opps! This is a server error'
                 });
             });
-    } catch (error) {
-        res.status(500).json({
-            status: false,
-            error: error
-        });
-    }
 };
 
-// PUT CUSTOMER for UPDATE :ID
-updateCustomer = async (req, res) => {
-    try {
-        await Customer.findByIdAndUpdate({_id: req.params.id}, req.body, {
-            new: true,
-            useFindAndModify: false
-        }).then(data => {
-            res.status(200).json({
-                status: true,
-                responseObj: data,
-                message: 'Customer updated successfully'
-            });
-        }).catch(err => {
-            res.status(500).json({
-                status: false,
-                error: 'Opps! This is a server error'
-            });
+/**
+ * PUT /customers/:id
+ * Purpose: Edit a specific customer by :id
+ */
+updateCustomer = (req, res) => {
+    Customer.findByIdAndUpdate({_id: req.params.id}, req.body, {
+        new: true,
+        useFindAndModify: false
+    }).then(data => {
+        res.status(200).json({
+            status: true,
+            responseObj: data,
+            message: 'Customer updated successfully'
         });
-    } catch (error) {
+    }).catch(err => {
         res.status(500).json({
             status: false,
-            error: error
+            error: 'Opps! This is a server error'
         });
-    }
+    });
 };
 
-// DELETE CUSTOMER :ID
-deleteCustomer = async (req, res) => {
-    try {
-        await Customer.findByIdAndDelete({ _id: req.params.id })
+/**
+ * DELETE /customers/:id
+ * Purpose: Delete a specific customer by :id
+ */
+deleteCustomer = (req, res) => {
+    Customer.findByIdAndDelete({ _id: req.params.id })
             .then(data => {
                 res.status(200).json({
                     status: true,
@@ -136,19 +121,8 @@ deleteCustomer = async (req, res) => {
                     error: err
                 });
             });
-    } catch (error) {
-        res.status(500).json({
-            status: false,
-            error: error
-        });
-    }
 };
 
 module.exports = {
-    getAllCustomers,
-    getCustomerByID,
-    createCustomer,
-    createAllCustomers,
-    updateCustomer,
-    deleteCustomer
+    getAllCustomers, getCustomerByID, createCustomer, createAllCustomers, updateCustomer, deleteCustomer
 }
