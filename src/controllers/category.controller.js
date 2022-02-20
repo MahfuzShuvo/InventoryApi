@@ -1,13 +1,13 @@
-const Customer = require('../models/customer');
+const Category = require('../models/category');
 
 /**
- * GET /customer
- * Purpose: Get all customers
+ * GET /category
+ * Purpose: Get all categories
  */
-getAllCustomer = (req, res) => {
-    const customer = Customer.find();
+getAllCategory = (req, res) => {
+    const category = Category.find();
     
-    customer.then(data => {
+    category.then(data => {
         res.status(200).json({
             status: true,
             responseObj: data,
@@ -22,11 +22,11 @@ getAllCustomer = (req, res) => {
 };
 
 /**
- * GET /customer/:id
- * Purpose: Get a specific customer by :id
+ * GET /category/:id
+ * Purpose: Get a specific category by :id
  */
-getCustomerByID = (req, res) => {
-    Customer.find({ _id: req.params.id })
+getCategoryByID = (req, res) => {
+    Category.find({ _id: req.params.id })
             .then(data => {
                 res.status(200).json({
                     status: true,
@@ -41,17 +41,17 @@ getCustomerByID = (req, res) => {
 };
 
 /**
- * POST /customer
- * Purpose: Create a customer
+ * POST /category
+ * Purpose: Create a category
  */
-createCustomer = (req, res) => {
-    const customer = new Customer(req.body);
-    customer.save()
+createCategory = (req, res) => {
+    const category = new Category(req.body);
+    category.save()
             .then(data => {
                 res.status(200).json({
                     status: true,
                     responseObj: data,
-                    message: 'Customer added successfully'
+                    message: 'Category added successfully'
                 });
             }).catch(err => {
                 res.status(500).json({
@@ -62,16 +62,16 @@ createCustomer = (req, res) => {
 };
 
 /**
- * POST /customer/all
- * Purpose: Create multiple customers
+ * POST /category/all
+ * Purpose: Create multiple categories
  */
-createAllCustomer = (req, res) => {
-    Customer.insertMany(req.body)
+createAllCategory = (req, res) => {
+    Category.insertMany(req.body)
             .then(data => {
                 res.status(200).json({
                     status: true,
                     responseObj: data,
-                    message: 'Customers are added successfully'
+                    message: 'Categories are added successfully'
                 });
             }).catch(err => {
                 res.status(500).json({
@@ -82,18 +82,18 @@ createAllCustomer = (req, res) => {
 };
 
 /**
- * PUT /customer/:id
- * Purpose: Edit a specific customer by :id
+ * PUT /category/:id
+ * Purpose: Edit a specific category by :id
  */
-updateCustomer = (req, res) => {
-    Customer.findByIdAndUpdate({_id: req.params.id}, req.body, {
+updateCategory = (req, res) => {
+    Category.findByIdAndUpdate({_id: req.params.id}, req.body, {
         new: true,
         useFindAndModify: false
     }).then(data => {
         res.status(200).json({
             status: true,
             responseObj: data,
-            message: 'Customer updated successfully'
+            message: 'Category updated successfully'
         });
     }).catch(err => {
         res.status(500).json({
@@ -104,15 +104,15 @@ updateCustomer = (req, res) => {
 };
 
 /**
- * DELETE /customer/:id
- * Purpose: Delete a specific customer by :id
+ * DELETE /category/:id
+ * Purpose: Delete a specific category by :id
  */
-deleteCustomer = (req, res) => {
-    Customer.findByIdAndDelete({ _id: req.params.id })
+deleteCategory = (req, res) => {
+    Category.findByIdAndDelete({ _id: req.params.id })
             .then(data => {
                 res.status(200).json({
                     status: true,
-                    message: 'Customer deleted successfully'
+                    message: 'Category deleted successfully'
                 });
             }).catch(err => {
                 res.status(500).json({
@@ -123,5 +123,5 @@ deleteCustomer = (req, res) => {
 };
 
 module.exports = {
-    getAllCustomer, getCustomerByID, createCustomer, createAllCustomer, updateCustomer, deleteCustomer
+    getAllCategory, getCategoryByID, createCategory, createAllCategory, updateCategory, deleteCategory
 }

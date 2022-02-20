@@ -1,23 +1,19 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const CategorySchema = new mongoose.Schema({
+const CategorySchema = new Schema({
     name: { type: String, required: true, trim: true },
-    lastName: { type: String, trim: true },
-    email: { type: String, unique: true, trim: true },
-    phone: { type: String, required: true, unique: true, trim: true },
-    address: [
-        {
-            street: { type: String, trim: true },
-            city: { type: String, trim: true },
-            state: { type: String, trim: true },
-            zip: { type: String, trim: true },
-        }
-    ],
-    image: { type: String, trim: true },
+    parentId: {
+        type: mongoose.Types.ObjectId,
+        ref: "Category",
+        default: null
+    },
     status: {
-        type: Boolean,
-        default: false
+        type: String,
+        enum: ["active", "inactive"],
+        default: "active"
     }
 }, { timestamps: true });
 
-module.exports = mongoose.model('category', CategorySchema);
+const Category = mongoose.model('Category', CategorySchema);
+module.exports = Category;

@@ -3,7 +3,10 @@ const cors = require('cors');
 const mongoose = require('./database/config');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
-const customersRoute = require('./src/routes/customer.route');
+const Authguard = require('./middleware/auth.guard');
+// routes import
+const customerRoute = require('./src/routes/customer.route');
+const categoryRoute = require('./src/routes/category.route');
 const systemUserRoute = require('./src/routes/systemUser.route');
 
 const PORT = process.env.PORT | 3000;
@@ -17,8 +20,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 // routes
-app.use('/api/customer', customersRoute);           // customer route
-app.use('/api/systemUser', systemUserRoute);        //system user route
+app.use('/api/systemUser', systemUserRoute);
+app.use('/api/customer', Authguard, customerRoute);
+app.use('/api/category', Authguard, categoryRoute);
 
 // default error handler
 const errorHandler = (err, req, res, next) => {

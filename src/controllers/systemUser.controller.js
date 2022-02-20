@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 
 /**
- * Post /signup
+ * POST /systemUser/signup
  * Purpose: Register a system user
  */
 signUp = async (req, res) => {
@@ -33,7 +33,7 @@ signUp = async (req, res) => {
 };
 
 /**
- * Post /login
+ * POST /systemUser/login
  * Purpose: Login in the system
  */
 login = async (req, res) => {
@@ -74,7 +74,37 @@ login = async (req, res) => {
 
 }
 
+/**
+ * PUT /systemUser/edit
+ * Purpose: Edit logged in system user
+ */
+editSystemUser = async (req, res) => {
+    try {
+        const systemUser = await SystemUser.findByIdAndUpdate({ ...req.body, _id: req.userId}, _.pick(req.body, 
+            ['firstName', 'lastName', 'phone', 'password']
+        ), {
+            new: true,
+            useFindAndModify: false
+        });
+        systemUser.password = await bcrypt.hash(systemUser.password, 12);
+        await systemUser.save();
+        res.status(200).json({
+            status: true,
+            responseObj: _.pick(systemUser, 
+                ['_id', 'firstName', 'lastName', 'userName', 'phone', 'userType']
+            ),
+            message: 'System user updated successfully'
+        });
+    } catch (err) {
+        res.status(500).json({
+            status: false,
+            error: err
+        });
+    }
+}
+
+
 
 module.exports = {
-    signUp, login
+    signUp, login, editSystemUser
 }
