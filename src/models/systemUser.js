@@ -6,7 +6,11 @@ const SystemUserSchema = new Schema({
     lastName: { type: String, trim: true },
     phone: { type: String, required: true, unique: true, trim: true },
     userName: { type: String, required: true, unique: true, trim: true },
-    password: { type: String, required: true, minlength: 8 },
+    password: { 
+        type: String, 
+        required: true, 
+        minlength: 8 
+    },
     userType: {
         type: String,
         enum: ["admin", "manager", "staff"],

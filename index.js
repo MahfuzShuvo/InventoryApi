@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 const Authguard = require('./middleware/auth.guard');
 // routes import
 const customerRoute = require('./src/routes/customer.route');
+const supplierRoute = require('./src/routes/supplier.route');
 const categoryRoute = require('./src/routes/category.route');
 const systemUserRoute = require('./src/routes/systemUser.route');
 
@@ -22,6 +23,7 @@ app.use(cors());
 // routes
 app.use('/api/systemUser', systemUserRoute);
 app.use('/api/customer', Authguard, customerRoute);
+app.use('/api/supplier', Authguard, supplierRoute);
 app.use('/api/category', Authguard, categoryRoute);
 
 // default error handler
