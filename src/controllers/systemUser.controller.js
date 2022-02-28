@@ -24,10 +24,17 @@ signUp = async (req, res) => {
             message: 'Register successfully'
         });
     } catch (err) {
-        res.status(500).json({
-            status: false,
-            error: "Sign up failed!"
-        });
+        if (err.code == 11000) {
+            res.status(500).json({
+                status: false,
+                error: "Duplicate input"
+            });
+        } else {
+            res.status(500).json({
+                status: false,
+                error: "Sign in failed!"
+            });
+        }
     }
     
 };
@@ -38,8 +45,7 @@ signUp = async (req, res) => {
  */
 login = async (req, res) => {
     try {
-        const systemUser  = await SystemUser.find({ userName: req.body.userName});
-        
+        var systemUser  = await SystemUser.find({ userName: req.body.userName});
         if (systemUser && systemUser.length > 0) {
             const isValidPass = await bcrypt.compare(req.body.password, systemUser[0].password);
             if (isValidPass) {
@@ -50,8 +56,12 @@ login = async (req, res) => {
                 }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
 
                 res.status(200).json({
-                    access_token: token,
-                    message: "Login successfully"
+                    responseCode: 200,
+                    message: "Login successfully",
+                    responseObj: {
+                        token: token,
+                        user: _.pick(systemUser[0], ['_id', 'firstName', 'lastName', 'userName', 'phone', 'userType'])
+                    }
                 });
             } else {
                 res.status(401).json({
@@ -81,12 +91,11 @@ login = async (req, res) => {
 editSystemUser = async (req, res) => {
     try {
         const systemUser = await SystemUser.findByIdAndUpdate({ ...req.body, _id: req.userId}, _.pick(req.body, 
-            ['firstName', 'lastName', 'phone', 'password']
+            ['firstName', 'lastName', 'phone']
         ), {
             new: true,
             useFindAndModify: false
         });
-        systemUser.password = await bcrypt.hash(systemUser.password, 12);
         await systemUser.save();
         res.status(200).json({
             status: true,
