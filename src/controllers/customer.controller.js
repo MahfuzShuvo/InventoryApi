@@ -10,6 +10,7 @@ getAllCustomer = (req, res) => {
     customer.then(data => {
         res.status(200).json({
             status: true,
+            responseCode: 200,
             responseObj: data,
             length: data.length
         });
