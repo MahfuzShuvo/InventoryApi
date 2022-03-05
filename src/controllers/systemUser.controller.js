@@ -53,7 +53,7 @@ login = async (req, res) => {
                 const token = jwt.sign({
                     userName: systemUser[0].userName,
                     userId: systemUser[0]._id
-                }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+                }, process.env.JWT_SECRET_KEY, { expiresIn: '1d' });
 
                 res.status(200).json({
                     responseCode: 200,
@@ -111,7 +111,6 @@ editSystemUser = async (req, res) => {
         });
     }
 }
-
 
 
 module.exports = {

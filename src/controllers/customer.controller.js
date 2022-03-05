@@ -1,11 +1,12 @@
 const Customer = require('../models/customer');
+const _ = require('lodash');
 
 /**
  * GET /customer
  * Purpose: Get all customers
  */
 getAllCustomer = (req, res) => {
-    const customer = Customer.find();
+    const customer = Customer.find().populate('createdBy', 'firstName lastName userName phone userType');
     
     customer.then(data => {
         res.status(200).json({
@@ -45,21 +46,38 @@ getCustomerByID = (req, res) => {
  * POST /customer
  * Purpose: Create a customer
  */
-createCustomer = (req, res) => {
-    const customer = new Customer(req.body);
-    customer.save()
-            .then(data => {
-                res.status(200).json({
-                    status: true,
-                    responseObj: data,
-                    message: 'Customer added successfully'
-                });
-            }).catch(err => {
-                res.status(500).json({
-                    status: false,
-                    error: err
-                });
-            });
+createCustomer = async (req, res) => {
+    const customer = new Customer({
+        ...req.body,
+        createdBy: req.userId
+    });
+    try {
+        var data = await customer.save();
+        res.status(200).json({
+            status: true,
+            responseCode: 200,
+            responseObj: data,
+            message: 'Customer added successfully'
+        });
+    } catch (err) {
+        res.status(500).json({
+            status: false,
+            responseCode: 500,
+            message: 'Oops! Something went wrong',
+            error: err
+        });
+    }
+    // customer.save()
+    //         .then(data => {
+    //             res.status(200).json({
+    //                 status: true,
+    //                 responseCode: 200,
+    //                 responseObj: data,
+    //                 message: 'Customer added successfully'
+    //             });
+    //         }).catch(err => {
+                
+    //         });
 };
 
 /**
@@ -93,13 +111,16 @@ updateCustomer = (req, res) => {
     }).then(data => {
         res.status(200).json({
             status: true,
+            responseCode: 200,
             responseObj: data,
             message: 'Customer updated successfully'
         });
     }).catch(err => {
         res.status(500).json({
             status: false,
-            error: 'Opps! This is a server error'
+            responseCode: 500,
+            message: 'Opps! This is a server error',
+            error: err
         });
     });
 };
@@ -113,11 +134,13 @@ deleteCustomer = (req, res) => {
             .then(data => {
                 res.status(200).json({
                     status: true,
+                    responseCode: 200,
                     message: 'Customer deleted successfully'
                 });
             }).catch(err => {
                 res.status(500).json({
                     status: false,
+                    responseCode: 500,
                     error: err
                 });
             });

@@ -7,13 +7,13 @@ router.get('/', customer.getAllCustomer);
 
 router.get('/:id', customer.getCustomerByID);
 
-router.post('/', customer.createCustomer);
+router.post('/create', customer.createCustomer);
 
 router.post('/all', customer.createAllCustomer);
 
-router.put('/:id', customer.updateCustomer);
+router.post('/update/:id', customer.updateCustomer);
 
-router.delete('/:id', customer.deleteCustomer);
+router.post('/delete/:id', customer.deleteCustomer);
 
 
 module.exports = router;

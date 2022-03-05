@@ -17,9 +17,8 @@ const SystemUserSchema = new Schema({
         required: true
     },
     status: {
-        type: String,
-        enum: ["active", "inactive"],
-        default: "active"
+        type: Boolean,
+        default: true
     }
 }, { timestamps: true });
 

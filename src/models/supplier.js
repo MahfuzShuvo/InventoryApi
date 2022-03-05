@@ -21,11 +21,7 @@ const SupplierSchema = new Schema({
     state: { type: String, trim: true },
     zip: { type: String, trim: true },
     image: { type: String, trim: true },
-    status: {
-        type: String,
-        enum: ["active", "inactive"],
-        default: "active"
-    }
+    status: Boolean
 }, { timestamps: true });
 
 const Supplier = mongoose.model('Supplier', SupplierSchema);

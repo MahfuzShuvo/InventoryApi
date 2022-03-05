@@ -21,11 +21,11 @@ const CustomerSchema = new Schema({
     state: { type: String, trim: true },
     zip: { type: String, trim: true },
     image: { type: String, trim: true },
-    status: {
-        type: String,
-        enum: ["active", "inactive"],
-        default: "active"
-    }
+    createdBy: {
+        type: mongoose.Types.ObjectId,
+        ref: 'SystemUser'
+    },
+    status: Boolean
 }, { timestamps: true });
 
 const Customer = mongoose.model('Customer', CustomerSchema);
