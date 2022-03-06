@@ -21,6 +21,10 @@ const SupplierSchema = new Schema({
     state: { type: String, trim: true },
     zip: { type: String, trim: true },
     image: { type: String, trim: true },
+    createdBy: {
+        type: mongoose.Types.ObjectId,
+        ref: 'SystemUser'
+    },
     status: Boolean
 }, { timestamps: true });
 

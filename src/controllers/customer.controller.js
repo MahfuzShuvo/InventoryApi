@@ -1,5 +1,4 @@
 const Customer = require('../models/customer');
-const _ = require('lodash');
 
 /**
  * GET /customer
@@ -43,7 +42,7 @@ getCustomerByID = (req, res) => {
 };
 
 /**
- * POST /customer
+ * POST /customer/create
  * Purpose: Create a customer
  */
 createCustomer = async (req, res) => {
@@ -67,21 +66,10 @@ createCustomer = async (req, res) => {
             error: err
         });
     }
-    // customer.save()
-    //         .then(data => {
-    //             res.status(200).json({
-    //                 status: true,
-    //                 responseCode: 200,
-    //                 responseObj: data,
-    //                 message: 'Customer added successfully'
-    //             });
-    //         }).catch(err => {
-                
-    //         });
 };
 
 /**
- * POST /customer/all
+ * POST /customer/create/all
  * Purpose: Create multiple customers
  */
 createAllCustomer = (req, res) => {
@@ -101,7 +89,7 @@ createAllCustomer = (req, res) => {
 };
 
 /**
- * PUT /customer/:id
+ * POST /customer/update/:id
  * Purpose: Edit a specific customer by :id
  */
 updateCustomer = (req, res) => {
@@ -126,7 +114,7 @@ updateCustomer = (req, res) => {
 };
 
 /**
- * DELETE /customer/:id
+ * POST /customer/delete/:id
  * Purpose: Delete a specific customer by :id
  */
 deleteCustomer = (req, res) => {
@@ -141,6 +129,7 @@ deleteCustomer = (req, res) => {
                 res.status(500).json({
                     status: false,
                     responseCode: 500,
+                    message: 'Opps! Something went wrong',
                     error: err
                 });
             });

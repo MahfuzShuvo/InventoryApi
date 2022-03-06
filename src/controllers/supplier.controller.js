@@ -5,17 +5,20 @@ const Supplier = require('../models/supplier');
  * Purpose: Get all suppliers
  */
 getAllSupplier = (req, res) => {
-    const supplier = Supplier.find();
+    const supplier = Supplier.find().populate('createdBy', 'firstName lastName userName phone userType');
     
     supplier.then(data => {
         res.status(200).json({
             status: true,
+            responseCode: 200,
             responseObj: data,
             length: data.length
         });
     }).catch(err => {
         res.status(500).json({
             status: false,
+            responseCode: 500,
+            message: "This is server error",
             error: err
         });
     });
@@ -41,28 +44,34 @@ getSupplierByID = (req, res) => {
 };
 
 /**
- * POST /supplier
+ * POST /supplier/create
  * Purpose: Create a supplier
  */
-createSupplier = (req, res) => {
-    const supplier = new Supplier(req.body);
-    supplier.save()
-            .then(data => {
-                res.status(200).json({
-                    status: true,
-                    responseObj: data,
-                    message: 'Supplier added successfully'
-                });
-            }).catch(err => {
-                res.status(500).json({
-                    status: false,
-                    error: err
-                });
-            });
+createSupplier = async (req, res) => {
+    const supplier = new Supplier({
+        ...req.body,
+        createdBy: req.userId
+    });
+    try {
+        var data = await supplier.save();
+        res.status(200).json({
+            status: true,
+            responseCode: 200,
+            responseObj: data,
+            message: 'Supplier added successfully'
+        });
+    } catch (err) {
+        res.status(500).json({
+            status: false,
+            responseCode: 500,
+            message: 'Oops! Something went wrong',
+            error: err
+        });
+    }
 };
 
 /**
- * POST /supplier/all
+ * POST /supplier/create/all
  * Purpose: Create multiple suppliers
  */
 createAllSupplier = (req, res) => {
@@ -82,7 +91,7 @@ createAllSupplier = (req, res) => {
 };
 
 /**
- * PUT /supplier/:id
+ * POST /supplier/update/:id
  * Purpose: Edit a specific supplier by :id
  */
 updateSupplier = (req, res) => {
@@ -92,19 +101,22 @@ updateSupplier = (req, res) => {
     }).then(data => {
         res.status(200).json({
             status: true,
+            responseCode: 200,
             responseObj: data,
             message: 'Supplier updated successfully'
         });
     }).catch(err => {
         res.status(500).json({
             status: false,
-            error: 'Opps! This is a server error'
+            responseCode: 500,
+            message: 'Opps! This is a server error',
+            error: err
         });
     });
 };
 
 /**
- * DELETE /supplier/:id
+ * POST /supplier/delete/:id
  * Purpose: Delete a specific supplier by :id
  */
 deleteSupplier = (req, res) => {
@@ -112,11 +124,14 @@ deleteSupplier = (req, res) => {
             .then(data => {
                 res.status(200).json({
                     status: true,
+                    responseCode: 200,
                     message: 'Supplier deleted successfully'
                 });
             }).catch(err => {
                 res.status(500).json({
                     status: false,
+                    responseCode: 200,
+                    message: 'Opps! Something went wrong',
                     error: err
                 });
             });

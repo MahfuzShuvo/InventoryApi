@@ -7,13 +7,13 @@ router.get('/', supplier.getAllSupplier);
 
 router.get('/:id', supplier.getSupplierByID);
 
-router.post('/', supplier.createSupplier);
+router.post('/create', supplier.createSupplier);
 
-router.post('/all', supplier.createAllSupplier);
+router.post('/create/all', supplier.createAllSupplier);
 
-router.put('/:id', supplier.updateSupplier);
+router.post('/update/:id', supplier.updateSupplier);
 
-router.delete('/:id', supplier.deleteSupplier);
+router.post('/delete/:id', supplier.deleteSupplier);
 
 
 module.exports = router;

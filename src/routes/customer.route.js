@@ -9,7 +9,7 @@ router.get('/:id', customer.getCustomerByID);
 
 router.post('/create', customer.createCustomer);
 
-router.post('/all', customer.createAllCustomer);
+router.post('/create/all', customer.createAllCustomer);
 
 router.post('/update/:id', customer.updateCustomer);
 
